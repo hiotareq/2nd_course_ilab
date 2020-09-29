@@ -5,44 +5,49 @@
 #include <vector>
 
 namespace triangle_geometry{
-    struct Point{
+    class Point{
         double _x,_y,_z;
-        Point(const double &x, &y, &z);
-        Point();
-        Point(const Point& source)
-        Point operator-( const Point& p2) const;
-    };
-
-    struct Plane{
-    private:
-        Point _norm_vec, _point;
-        double _d;
     public:
-        double get_d();
-        Point get_norm_vec();
-        Plane();
-        Plane(const Point& norm_vec, &point);
+        Point(const double &x,const double &y,const double &z);
+        Point();
+        Point(const Point& source);
+        Point operator-( const Point& p2) const;
+        double get_x() const;
+        double get_y() const;
+        double get_z() const;
     };
 
     class triangle{
     private:
-        std::vector<Point>[3] vertices;
+        Point _p1, _p2, _p3;
     public:
         triangle();
-        triangle(const Point &p1, &p2, &p3);
+        triangle(const Point &p1, const Point &p2, const Point &p3);
         bool is_degenerate() const;//true if degenerate
-        Point get_vertice(const int &i) const;
+        Point getVertice(const int &i) const;
+    };
+
+    class Plane{
+    private:
+        Point _norm_vec, _point;
+        double _d;
+    public:
+        double get_d() const;
+        Point get_norm_vec() const;
+        Plane();
+        Plane(const Point& norm_vec, const Point &point);
+        Plane( const triangle_geometry::triangle & tr);
     };
 
     class triangle_handler{
     private:
+        double e = 0.00001;
     public:
-        bool is_intersect(triangle& tr1, triangle& tr2) const;
-        bool vec_mul(const Point &p1, &p2 ) const;//true if !=0, передаются точки как векторы
-        Point vec_mul(const Point &p1, &p2 ) const;//снова точки как векторы
-        Plane cal_plane(const triangle& tr) const;
+        bool is_intersect(const triangle& tr1,const triangle& tr2) const;
+        static Point vec_mul(const Point &p1, const Point &p2 );//точки = векторы
         int sign_of_dist( const Plane &plane, const Point& point ) const;
-        double sc_pr(const Point& p1, &p2) const;
+        static double sc_pr(const Point& p1, const Point& p2);//точки = векторы
+        bool is_coincident( const Plane& p1, const Plane& p2, const double& e) const;//true, если совпадают
     };
 }
 
