@@ -65,7 +65,7 @@ namespace triangle_geometry{
     public:
         bool is_intersect( const triangle& tr1,const triangle& tr2) const;
         int sign_of_dist( const Plane &plane, const Point& point ) const;//знак расстояния от точки до плоскости
-        bool is_coincident( const Plane& p1, const Plane& p2) const;//true, если совпадают
+        bool is_coincident( const Plane& p1, const Plane& p2, const Point& point1, const Point& point2) const;//true, если совпадают
         bool is_intersect2D( const triangle& tr1, const triangle& tr2) const;//true, если пересекаются
         int GetMiddleIndex( const int& i0, const int& i1) const;
         int GetExtremeIndex( const triangle& tr, const Point& point) const;
