@@ -1,6 +1,10 @@
 #include "triangle.h"
 #include <cmath>
 
+
+//TO-DO: точка пересечения стороны треугольника и прямой пересечения плоскостей, пересечение отрезков, 
+//этими прямыми
+
 bool triangle_geometry::triangle_handler::is_intersect(const triangle &tr1, const triangle &tr2) const {
     if ( tr1.is_degenerate() ){
         /*
@@ -20,7 +24,7 @@ bool triangle_geometry::triangle_handler::is_intersect(const triangle &tr1, cons
     if ( sign1 * sign2 > 0 && sign1 * sign3 > 0) return false;//треугольник полностью с одной стороны от плоскости
     //else continue
     Plane plane_2 = Plane( tr2);
-    if ( triangle_handler::is_coincident( plane_1, plane_2 )) {
+    if ( triangle_handler::is_coincident( plane_1, plane_2, tr1.getVertice(1), tr2.getVertice(1) )) {
         if (plane_1.get_d() == plane_2.get_d()) {
             if ( is_intersect2D(tr1, tr2)) return true;
             return false;
@@ -115,12 +119,10 @@ triangle_geometry::triangle::triangle(const triangle_geometry::Point &p1, const 
                                       const triangle_geometry::Point &p3): _p1(p1), _p2(p2), _p3(p3) {}
 
 bool triangle_geometry::triangle_handler::is_coincident(const triangle_geometry::Plane &p1,
-                                                        const triangle_geometry::Plane &p2) const {
-    if ( (p1.get_norm_vec().get_x() - e) <= p2.get_norm_vec().get_x() && (p1.get_norm_vec().get_x() + e) >= p2.get_norm_vec().get_x()
-    && (p1.get_norm_vec().get_y() - e) <= p2.get_norm_vec().get_y() && (p1.get_norm_vec().get_y() + e) >= p2.get_norm_vec().get_y()
-    && (p1.get_norm_vec().get_z() - e) <= p2.get_norm_vec().get_z() && (p1.get_norm_vec().get_z() + e) >= p2.get_norm_vec().get_z()){
-        return true;
-    }
+                                                        const triangle_geometry::Plane &p2,
+                                                        const triangle_geometry::Point &point1,
+                                                        const triangle_geometry::Point &point2) const {
+    if ( (point1 - point2) * p1.get_norm_vec() == 0 && p1.get_d() == p2.get_d() ) return true;
     return false;
 }
 
