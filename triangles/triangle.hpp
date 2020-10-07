@@ -44,7 +44,7 @@ namespace triangle_geometry{
         Point GetPoint();
         Point Getdirection();
         Line(const Point& direction, const Point& point);
-        bool IsOverlap( const Point& p1,const Point& p2,const Point& p3,const Point& p4,const Point& p5,const Point& p6);
+        bool IsOverlap( const Point& PointFromTriangle,const Point& PointFromLIne,const Point& p3,const Point& p4,const Point& p5,const Point& p6);
     };
 
     class Plane{

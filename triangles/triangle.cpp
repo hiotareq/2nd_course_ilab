@@ -1,8 +1,8 @@
-#include "triangle.h"
+#include "triangle.hpp"
 #include <cmath>
 
 
-//TO-DO: точка пересечения стороны треугольника и прямой пересечения плоскостей, пересечение отрезков, 
+//TO-DO: точка пересечения стороны треугольника и прямой пересечения плоскостей, пересечение отрезков
 //этими прямыми
 
 bool triangle_geometry::triangle_handler::is_intersect(const triangle &tr1, const triangle &tr2) const {
@@ -232,66 +232,5 @@ _direction(direction), _point(point) {}
 bool triangle_geometry::Line::IsOverlap(const triangle_geometry::Point &p1, const triangle_geometry::Point &p2,
                                         const triangle_geometry::Point &p3, const triangle_geometry::Point &p4,
                                         const triangle_geometry::Point &p5, const triangle_geometry::Point &p6) {
-    _point = _point + _direction * 10;
-    Point tr1Min, tr1Max, tr2Min, tr2Max;
-    if ( (p1 - _point).length() < (p2 - _point).length()){//p1<p2
-        if ( (p1 - _point).length() < (p3 - _point).length()){//p1<p3, p1<p2
-            tr1Min = p1;
-            if ( (p3 - _point).length() < ( (p2 - _point).length()))    tr1Max = p2;//p3<p2, p1<p3, p1<p2
-            else tr1Max = p3;//p2<p3, p1<p3, p1<p2
-        }
-        else { //p3<p1,p1<p2
-            tr1Min = p3;
-            tr1Max = p2;
-        }
-    }else{//p2<p1
-        if ( (p2 - _point).length() < (p3 - _point).length()){//p2<p1, p2<p3
-            tr1Min = p2;
-            if ( (p1 - _point).length() < (p3 - _point).length()){//p2<p1, p2<p3, p1<p3
-                tr1Max = p3;
-            }else{//p2<p1, p2<p3, p3<p1
-                tr1Max = p1;
-            }
-        }
-        else {//p2<p1, p3<p2
-            tr1Min = p3;
-            tr1Max =p1;
-        }
-    }
-    if ( (p4 - _point).length() < (p5 - _point).length()){//p1<p2
-        if ( (p4 - _point).length() < (p6 - _point).length()){//p1<p3, p1<p2
-            tr1Min = p4;
-            if ( (p6 - _point).length() < ( (p5 - _point).length()))    tr1Max = p5;//p3<p2, p1<p3, p1<p2
-            else tr1Max = p6;//p2<p3, p1<p3, p1<p2
-        }
-        else { //p3<p1,p1<p2
-            tr1Min = p6;
-            tr1Max = p5;
-        }
-    }else{//p2<p1
-        if ( (p5 - _point).length() < (p6 - _point).length()){//p2<p1, p2<p3
-            tr1Min = p5;
-            if ( (p4 - _point).length() < (p6 - _point).length()){//p2<p1, p2<p3, p1<p3
-                tr1Max = p6;
-            }else{//p2<p1, p2<p3, p3<p1
-                tr1Max = p4;
-            }
-        }
-        else {//p2<p1, p3<p2
-            tr1Min = p6;
-            tr1Max =p4;
-        }
-    }
-    double tr1MinDist, tr1MaxDist, tr2MinDist, tr2MaxDist;
-    tr1MinDist = (tr1Min - _point).length();
-    tr1MaxDist = (tr1Max - _point).length();
-    tr2MinDist = (tr2Min - _point).length();
-    tr2MaxDist = (tr2Max - _point).length();
-    if ( tr1MaxDist > tr2MaxDist && tr2MaxDist > tr1MinDist) return true;
-    if ( tr2MaxDist > tr1MaxDist && tr1MaxDist > tr2MinDist) return true;
-    if ( tr1MaxDist > tr2MaxDist && tr2MinDist > tr1MinDist) return true;
-    if ( tr2MaxDist > tr1MaxDist && tr1MinDist > tr2MinDist) return true;
-    if ( tr1MaxDist == tr2MaxDist && tr1MinDist == tr2MinDist) return true;
-    if ( tr1MaxDist == tr2MinDist || tr2MaxDist == tr1MinDist) return true;
-    return false;
+    
 }
