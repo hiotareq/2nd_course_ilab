@@ -8,7 +8,6 @@ Vector3D::Vector3D() : Vector3D(0, 0, 0) {
 }
 
 Vector3D::Vector3D(double _x, double _y, double _z) : x(_x), y(_y), z(_z) {
-
 }
 
 Vector3D::~Vector3D() {
