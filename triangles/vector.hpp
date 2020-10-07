@@ -44,6 +44,8 @@ public:
 
     double operator*(const Vector3D &v) const;
 
+    Vector3D operator%(const Vector3D &v) const;
+
 };
 
 Vector3D operator*(int a, const Vector3D &v);

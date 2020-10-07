@@ -62,6 +62,9 @@ double Vector3D::operator*(const Vector3D &v) const {
     return x * v.x + y * v.y + z * v.z;
 }
 
+Vector3D Vector3D::operator%(const Vector3D &v) const{
+    return Vector3D( y * v.getZ() - z * v.getY(), z * v.getX() - x * v.getZ(), x * v.getY() - y * v.getX());
+}
 
 Vector3D operator*(int a, const Vector3D &v) {
     return Vector3D(v.getX() * a, v.getY() * a, v.getZ() * a);

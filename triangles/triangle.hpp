@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include "vector.hpp"
 
 namespace triangle_geometry{
     class Point{
@@ -41,19 +42,18 @@ namespace triangle_geometry{
         Point _direction;//направляющий вектор прямой
         Point _point;//точка на прямой
     public:
-        Point GetPoint();
-        Point Getdirection();
+        Point GetPoint() const;
+        Point Getdirection() const;
         Line(const Point& direction, const Point& point);
-        bool IsOverlap( const Point& PointFromTriangle,const Point& PointFromLIne,const Point& p3,const Point& p4,const Point& p5,const Point& p6);
     };
 
     class Plane{
     private:
-        Point _norm_vec, _point;
+        Point normal, _point;
         double _d;
     public:
         double get_d() const;
-        Point get_norm_vec() const;
+        Point get_normal() const;
         Plane();
         Plane( const Point& norm_vec, const Point &point);
         Plane( const triangle_geometry::triangle & tr);
@@ -71,6 +71,7 @@ namespace triangle_geometry{
         int GetExtremeIndex( const triangle& tr, const Point& point) const;
         Point GetNormVector( const triangle& tr, const Point& p1, const Point& p2) const;
         Line GetLine(const Plane& p1, const Plane& p2) const;
+        Point IntersectionEdgeLine( const Point& PointFromTriangle, const Line& line, const Vector3D& EdgeDir) const;
     };
 }
 
