@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include "vector.hpp"
 
 namespace triangle_geometry{
     class Point{
@@ -12,16 +13,9 @@ namespace triangle_geometry{
         Point( const double &x,const double &y,const double &z);
         Point();
         Point(const Point& source);
-        Point operator-( const Point& p2) const;
         double get_x() const;
         double get_y() const;
         double get_z() const;
-        double operator*( const Point& source) const;//скалярное умножение, точки == векторы
-        Point operator%( const Point& source) const;//векторное умножение, точки == векторы
-        Point operator+(const Point& source) const;//точка == вектор
-        Point operator/(const double& source) const;
-        Point operator*( const int& source) const;//точка == вектор
-        Point operator*( const double& source) const;//точка == вектор
         double length() const;
     };
 
@@ -38,24 +32,25 @@ namespace triangle_geometry{
 
     class Line{
     private:
-        Point _direction;//направляющий вектор прямой
+        Vector3D _direction;//направляющий вектор прямой
         Point _point;//точка на прямой
     public:
         Point GetPoint();
-        Point Getdirection();
-        Line(const Point& direction, const Point& point);
+        Vector3D Getdirection();
+        Line(const Vector3D& direction, const Point& point);
         bool IsOverlap( const Point& p1,const Point& p2,const Point& p3,const Point& p4,const Point& p5,const Point& p6);
     };
 
     class Plane{
     private:
-        Point _norm_vec, _point;
+        Point _point;
+        Vector3D normal;
         double _d;
     public:
         double get_d() const;
-        Point get_norm_vec() const;
+        Vector3D get_normal() const;
         Plane();
-        Plane( const Point& norm_vec, const Point &point);
+        Plane( const Vector3D& norm_vec, const Point &point);
         Plane( const triangle_geometry::triangle & tr);
     };
 
@@ -69,7 +64,7 @@ namespace triangle_geometry{
         bool is_intersect2D( const triangle& tr1, const triangle& tr2) const;//true, если пересекаются
         int GetMiddleIndex( const int& i0, const int& i1) const;
         int GetExtremeIndex( const triangle& tr, const Point& point) const;
-        Point GetNormVector( const triangle& tr, const Point& p1, const Point& p2) const;
+        Vector3D GetNormVector( const triangle& tr, const Point& p1, const Point& p2) const;
         Line GetLine(const Plane& p1, const Plane& p2) const;
     };
 }

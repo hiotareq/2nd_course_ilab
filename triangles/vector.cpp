@@ -25,6 +25,10 @@ double Vector3D::getZ() const {
     return z;
 }
 
+double Vector3D::length() const {
+    return sqrt(_x * _x + _y * _y + _z * _z);
+}
+
 void Vector3D::setX(double x) {
     this->x = x;
 }
@@ -81,5 +85,7 @@ std::istream &operator>>(std::istream &is, Vector3D &v) {
     return is;
 }
 
-Vector3D::Vector3D( const triangle_geometry::Point& point1, const triangle_geometry::Point& point2):
-x(point1.get_x() - point2.get_x()), y(point1.get_y() - point2.get_y()), z(point1.get_z() - point2.get_z()){}
+Vector3D::Vector3D(const triangle_geometry::Point& point) : x(point.get_x()), y(point.get_y()), z(point.get_z()) {}
+
+Vector3D::Vector3D(const triangle_geometry::Point &point1, const triangle_geometry::Point &point2) :
+        x(point1.get_x() - point2.get_x()), y(point1.get_y() - point2.get_y()), z(point1.get_z() - point2.get_z()) {}

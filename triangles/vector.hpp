@@ -16,6 +16,8 @@ public:
 
     Vector3D(double _x, double _y, double _z);
 
+    Vector3D(const triangle_geometry::Point& point);
+
     Vector3D(const triangle_geometry::Point& point1, const triangle_geometry::Point& point2);
 
     ~Vector3D();
@@ -43,6 +45,8 @@ public:
     Vector3D operator*(const int a) const;
 
     double operator*(const Vector3D &v) const;
+
+    double length() const;
 
 };
 

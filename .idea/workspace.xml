@@ -9,7 +9,13 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0c713757-984c-4298-9dc5-4a8f9713d6c0" name="Default Changelist" comment="" />
+    <list default="true" id="0c713757-984c-4298-9dc5-4a8f9713d6c0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/triangles/triangle.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/triangles/triangle.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/triangles/triangle.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/triangles/triangle.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/triangles/vector.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/triangles/vector.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/triangles/vector.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/triangles/vector.hpp" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,10 +33,22 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="ProjectConfigurationFiles">
+    <option name="files">
+      <list>
+        <option value="$PROJECT_DIR$/.idea/triangles.iml" />
+        <option value="$PROJECT_DIR$/.idea/misc.xml" />
+        <option value="$PROJECT_DIR$/.idea/vcs.xml" />
+        <option value="$PROJECT_DIR$/.idea/modules.xml" />
+      </list>
+    </option>
+  </component>
   <component name="ProjectId" id="1iYcLnlFE4fsujw4QTogMwz1Iuc" />
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../linal" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -54,7 +72,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1602087912391</updated>
-      <workItem from="1602087914013" duration="427000" />
+      <workItem from="1602087914013" duration="9577000" />
     </task>
     <servers />
   </component>
