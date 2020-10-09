@@ -55,20 +55,15 @@ namespace triangle_geometry{
         Plane( const triangle_geometry::triangle & tr);
     };
 
-    class triangle_handler{
-    private:
-        double e = 1e-3;
-    public:
-        bool is_intersect( const triangle& tr1,const triangle& tr2) const;
-        int sign_of_dist( const Plane &plane, const Point& point ) const;//знак расстояния от точки до плоскости
-        bool is_coincident( const Plane& p1, const Plane& p2, const Point& point1, const Point& point2) const;//true, если совпадают
-        bool is_intersect2D( const triangle& tr1, const triangle& tr2) const;//true, если пересекаются
-        int GetMiddleIndex( const int& i0, const int& i1) const;
-        int GetExtremeIndex( const triangle& tr, const Vector3D& point) const;
-        Vector3D GetNormVector( const triangle& tr, const Point& p1, const Point& p2) const;
-        Line GetLine(const Plane& p1, const Plane& p2) const;
-        Point IntersectionEdgeLine(const Point& PointFromTriangle,const Line& line, const Vector3D& EdgeDir) const;
-    };
+        bool is_intersect( const triangle& tr1,const triangle& tr2);
+        int sign_of_dist( const Plane &plane, const Point& point );//знак расстояния от точки до плоскости
+        bool is_coincident( const Plane& p1, const Plane& p2, const Point& point1, const Point& point2);//true, если совпадают
+        bool is_intersect2D( const triangle& tr1, const triangle& tr2);//true, если пересекаются
+        int GetMiddleIndex( const int& i0, const int& i1);
+        int GetExtremeIndex( const triangle& tr, const Vector3D& point);
+        Vector3D GetNormVector( const triangle& tr, const Point& p1, const Point& p2);
+        Line GetLine(const Plane& p1, const Plane& p2);
+        Point IntersectionEdgeLine(const Point& PointFromTriangle,const Line& line, const Vector3D& EdgeDir);
 
     class Vector3D {
     private:
