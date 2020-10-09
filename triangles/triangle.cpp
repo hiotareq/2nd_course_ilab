@@ -1,65 +1,75 @@
-#include "triangle.h"
+#include "triangle.hpp"
 #include <cmath>
-#include "vector.hpp"
-
 
 //TO-DO: точка пересечения стороны треугольника и прямой пересечения плоскостей, пересечение отрезков, 
 //этими прямыми
 
 bool triangle_geometry::triangle_handler::is_intersect(const triangle &tr1, const triangle &tr2) const {
-    if (tr1.is_degenerate()) {
+    if ( tr1.is_degenerate() ){
         /*
          * удаление вырожденного треугольника из базы данных
          */
     }
-    if (tr2.is_degenerate()) {
+    if ( tr2.is_degenerate()){
         /*
          * удаление вырожденного треугольника из базы данных
          */
     }
-    Plane plane_1 = Plane(tr1);
-    int sign1, sign2, sign3;
-    sign1 = triangle_handler::sign_of_dist(plane_1, tr2.getVertice(1));
-    sign2 = triangle_handler::sign_of_dist(plane_1, tr2.getVertice(2));
-    sign3 = triangle_handler::sign_of_dist(plane_1, tr2.getVertice(3));
-    if (sign1 * sign2 > 0 && sign1 * sign3 > 0) return false;//треугольник полностью с одной стороны от плоскости
+    Plane plane_1 = Plane( tr1);
+    int sign11, sign12, sign13;
+    sign11 = triangle_handler::sign_of_dist(plane_1, tr2.getVertice(1));
+    sign12 = triangle_handler::sign_of_dist(plane_1, tr2.getVertice(2));
+    sign13 = triangle_handler::sign_of_dist(plane_1, tr2.getVertice(3));
+    if ( sign11 * sign12 > 0 && sign11 * sign13 > 0) return false;//треугольник полностью с одной стороны от плоскости
     //else continue
-    Plane plane_2 = Plane(tr2);
-    if (triangle_handler::is_coincident(plane_1, plane_2, tr1.getVertice(1), tr2.getVertice(1))) {
-        if (plane_1.get_d() == plane_2.get_d()) {
-            if (is_intersect2D(tr1, tr2)) return true;
-            return false;
+    Vector3D edge00, edge01, edge10, edge11;
+    Point p00, p01, p10, p11;//это точки для вычисления отрезков-проекций на линию пересечения
+    p00 = tr1.getVertice(1);
+    p01 = tr1.getVertice(3);
+    if ( sign11 * sign12 < 0){//1 и 2 по разные стороны от плоскости
+        edge00 = Vector3D(tr1.getVertice(1), tr1.getVertice(2));
+        if ( sign11 * sign13 < 0){//1 и 3 по разные стороны от плоскости
+            edge01 = Vector3D(tr1.getVertice(1), tr1.getVertice(3));
+        }else{//1 и 3 по одну сторону от плоскости, с другой стороны - 2
+            edge01 = Vector3D(tr1.getVertice(2), tr1.getVertice(3));
         }
-        return false;//треугольники в параллельных плоскостях
+    }else{//1 и 2 по одну сторону от плоскости
+        edge00 = Vector3D(tr1.getVertice(1), tr1.getVertice(3));
+        edge01 = Vector3D(tr1.getVertice(2), tr1.getVertice(3));
     }
-    sign1 = triangle_handler::sign_of_dist(plane_2, tr1.getVertice(1));
-    sign2 = triangle_handler::sign_of_dist(plane_2, tr1.getVertice(2));
-    sign3 = triangle_handler::sign_of_dist(plane_2, tr1.getVertice(3));
-    if (sign1 * sign2 > 0 && sign1 * sign3 > 0) return false;//треугольники полностью с одной стороны от плоскости
+    Plane plane_2 = Plane( tr2);
+    if ( triangle_handler::is_coincident( plane_1, plane_2, tr1.getVertice(1), tr2.getVertice(1) )) {
+        if (plane_1.get_d() == plane_2.get_d()) {
+            if ( is_intersect2D(tr1, tr2)) return true;
+            return false;
+        }return false;//треугольники в параллельных плоскостях
+    }//else continue
+    int sign21, sign22, sign23; 
+    sign21 = triangle_handler::sign_of_dist(plane_2, tr1.getVertice(1));
+    sign22 = triangle_handler::sign_of_dist(plane_2, tr1.getVertice(2));
+    sign23 = triangle_handler::sign_of_dist(plane_2, tr1.getVertice(3));
+    if ( sign21 * sign22 > 0 && sign21 * sign23 > 0) return false;//треугольники полностью с одной стороны от плоскости
+    //else continue
+    p10 = tr2.getVertice(1);
+    p11 = tr2.getVertice(3);
+    if ( sign21 * sign22 < 0){//1 и 2 по разные стороны от плоскости
+        edge00 = Vector3D(tr2.getVertice(1), tr2.getVertice(2));
+        if ( sign21 * sign23 < 0){//1 и 3 по разные стороны от плоскости
+            edge11 = Vector3D(tr2.getVertice(1), tr2.getVertice(3));
+        }else{//1 и 3 по одну сторону от плоскости, с другой стороны - 2
+            edge11 = Vector3D(tr2.getVertice(2), tr2.getVertice(3));
+        }
+    }else{//1 и 2 по одну сторону от плоскости
+        edge10 = Vector3D(tr1.getVertice(1), tr1.getVertice(3));
+        edge11 = Vector3D(tr1.getVertice(2), tr1.getVertice(3));
+    }
     Line IntersectLine = triangle_handler::GetLine(plane_1, plane_2);
-    Point p11, p12, p13, p21, p22, p23;
-    p11 = IntersectLine.GetPoint() + IntersectLine.Getdirection() *
-                                     ((tr1.getVertice(0) - IntersectLine.GetPoint()) * IntersectLine.Getdirection()) /
-                                     (IntersectLine.Getdirection() * IntersectLine.Getdirection());
-    p12 = IntersectLine.GetPoint() + IntersectLine.Getdirection() *
-                                     ((tr1.getVertice(1) - IntersectLine.GetPoint()) * IntersectLine.Getdirection()) /
-                                     (IntersectLine.Getdirection() * IntersectLine.Getdirection());
-    p13 = IntersectLine.GetPoint() + IntersectLine.Getdirection() *
-                                     ((tr1.getVertice(2) - IntersectLine.GetPoint()) * IntersectLine.Getdirection()) /
-                                     (IntersectLine.Getdirection() * IntersectLine.Getdirection());
-    p21 = IntersectLine.GetPoint() + IntersectLine.Getdirection() *
-                                     ((tr2.getVertice(0) - IntersectLine.GetPoint()) * IntersectLine.Getdirection()) /
-                                     (IntersectLine.Getdirection() * IntersectLine.Getdirection());
-    p22 = IntersectLine.GetPoint() + IntersectLine.Getdirection() *
-                                     ((tr2.getVertice(1) - IntersectLine.GetPoint()) * IntersectLine.Getdirection()) /
-                                     (IntersectLine.Getdirection() * IntersectLine.Getdirection());
-    p23 = IntersectLine.GetPoint() + IntersectLine.Getdirection() *
-                                     ((tr2.getVertice(2) - IntersectLine.GetPoint()) * IntersectLine.Getdirection()) /
-                                     (IntersectLine.Getdirection() * IntersectLine.Getdirection());
-    if (IntersectLine.IsOverlap(tr1.getVertice(1), tr1.getVertice(2), tr1.getVertice(3),
-                                tr2.getVertice(1), tr2.getVertice(2), tr2.getVertice(3)))
-        return true;
-    return false;
+    Point t00, t01, t10, t11;//t0 - первый треугольник и его точки пересечения с прямой, t1 - второй треугольник
+    t00 = IntersectionEdgeLine(p00, IntersectLine, edge00);
+    t01 = IntersectionEdgeLine(p01, IntersectLine, edge01);
+    t10 = IntersectionEdgeLine(p10, IntersectLine, edge10);
+    t11 = IntersectionEdgeLine(p11, IntersectLine, edge11);
+    double d1, d2, d3, d4, d5, d6;
 }
 
 int triangle_geometry::triangle_handler::sign_of_dist(const Plane &plane, const Point &point) const {
@@ -71,14 +81,17 @@ int triangle_geometry::triangle_handler::sign_of_dist(const Plane &plane, const 
 
 triangle_geometry::Plane::Plane() = default;
 
-triangle_geometry::Plane::Plane(const Vec &norm_vec, const Point &point) {
+triangle_geometry::Plane::Plane(const Vector3D &norm_vec, const Point &point) {
     normal = norm_vec;
     _point = point;
     _d = norm_vec * point;
 }
 
-triangle_geometry::Plane::Plane(const triangle_geometry::triangle &tr) : Plane(
-        ((tr.getVertice(1) - tr.getVertice(2)) % (tr.getVertice(2) - tr.getVertice(3))), tr.getVertice(3)) {}
+triangle_geometry::Plane::Plane(const triangle_geometry::triangle &tr) {
+            Vector3D v1(tr.getVertice(1), tr.getVertice(2)), v2(tr.getVertice(2), tr.getVertice(3));
+            normal = v1 % v2;
+            _point = tr.getVertice(3);
+        }
 
 triangle_geometry::Vector3D triangle_geometry::Plane::get_normal() const {
     return normal;
@@ -91,20 +104,15 @@ double triangle_geometry::Plane::get_d() const {
 triangle_geometry::triangle::triangle() = default;
 
 bool triangle_geometry::triangle::is_degenerate() const {//true if degenerate
-    Vector3D norm_vec = (_p1 - _p2, _p2 - _p3);
-    if (norm_vec.get_x() == 0 && norm_vec.get_y() == 0 && norm_vec.get_z() == 0) return true;
+    Vector3D norm_vec, v1{_p1, _p2}, v2{_p2, _p3};
+    norm_vec = v1 % v2;
+    if (norm_vec.getX() == 0 && norm_vec.getY() == 0 && norm_vec.getZ() == 0) return true;
     return false;
 }
 
 triangle_geometry::Point::Point(const double &x, const double &y, const double &z) : _x(x), _y(y), _z(z) {}
 
 triangle_geometry::Point::Point() : Point(0.0, 0.0, 0.0) {}
-
-triangle_geometry::Point::Point(const Point &source) = default;
-
-triangle_geometry::Point triangle_geometry::Point::operator-(const Point &source) const {
-    return Point(_x - (source._x), _y - (source._y), _z - (source._z));
-}
 
 double triangle_geometry::Point::get_x() const {
     return _x;
@@ -131,22 +139,23 @@ bool triangle_geometry::triangle_handler::is_coincident(const triangle_geometry:
                                                         const triangle_geometry::Plane &p2,
                                                         const triangle_geometry::Point &point1,
                                                         const triangle_geometry::Point &point2) const {
-    if ((point1 - point2) * p1.get_normal() == 0 && p1.get_d() == p2.get_d()) return true;
+                                                            Vector3D v(point1, point2);
+    if (v * p1.get_normal() == 0 && p1.get_d() == p2.get_d()) return true;
     return false;
 }
 
 
 bool triangle_geometry::triangle_handler::is_intersect2D(const triangle &tr1, const triangle &tr2) const {
     for (int i0 = 0, i1 = 2; i0 < 3; i1 = 0, i0++) {
-        Point point = GetNormVector(tr1, tr1.getVertice(i0), tr1.getVertice(i1));
+        Vector3D point = GetNormVector(tr1, tr1.getVertice(i0), tr1.getVertice(i1));
         int min = GetExtremeIndex(tr2, point * (-1));
-        Point diff = tr2.getVertice(min) - tr1.getVertice(i0);
+        Vector3D diff(tr2.getVertice(min), tr1.getVertice(i0));
         if (point * diff > 0) return false;
     }
     for (int i0 = 0, i1 = 2; i0 < 3; i1 = i0, i0++) {
-        Point point = GetNormVector(tr2, tr2.getVertice(i0), tr2.getVertice(i1));
+        Vector3D point = GetNormVector(tr2, tr2.getVertice(i0), tr2.getVertice(i1));
         int min = GetExtremeIndex(tr1, point * (-1));
-        Point diff = tr1.getVertice(min) - tr2.getVertice(i0);
+        Vector3D diff(tr1.getVertice(min), tr2.getVertice(i0));
         if (point * diff > 0) return false;
     }
     return true;
@@ -157,33 +166,33 @@ int triangle_geometry::triangle_handler::GetMiddleIndex(const int &i0, const int
     return (((i0 + i1 + 3) / 2) % 3);
 }
 
-int triangle_geometry::triangle_handler::GetExtremeIndex(const triangle &tr, const Point &point) const {
+int triangle_geometry::triangle_handler::GetExtremeIndex(const triangle &tr, const Vector3D &point) const {
     int i0 = 0, i1 = 0;
     while (true) {
         int mid = GetMiddleIndex(i0, i1);
         int next = (mid + 1) % 3;
-        Point edge = tr.getVertice(next) - tr.getVertice(mid);
+        Vector3D edge{tr.getVertice(next), tr.getVertice(mid)};
         if (point * edge > 0) {
             if (mid == i0) return i1;
             i0 = mid;
         } else {
             int prev = (mid + 2) % 3;
-            edge = tr.getVertice(mid) - tr.getVertice(prev);
+            edge = Vector3D(tr.getVertice(mid), tr.getVertice(prev));
             if (point * edge >= 0) return mid;
             i1 = mid;
         }
     }
 }
 
-triangle_geometry::Point triangle_geometry::triangle_handler::GetNormVector(const triangle_geometry::triangle &tr,
-                                                                            const triangle_geometry::Point &p1,
-                                                                            const triangle_geometry::Point &p2) const {
-    return ((p1 - p2) % Plane(tr).get_normal());
+triangle_geometry::Vector3D triangle_geometry::triangle_handler::GetNormVector(const triangle_geometry::triangle &tr,
+const triangle_geometry::Point &p1,const triangle_geometry::Point &p2) const {
+    Vector3D v1(p1), v2(p2);
+    return ((v1 - v2) % Plane(tr).get_normal());
 }
 
 triangle_geometry::Line triangle_geometry::triangle_handler::GetLine(const triangle_geometry::Plane &p1,
-                                                                     const triangle_geometry::Plane &p2) const {
-    Point direction = p1.get_normal() % p2.get_normal();
+                                                                     const triangle_geometry::Plane &p2) const {                                                                         
+    Vector3D direction = p1.get_normal() % p2.get_normal();
     if (direction.length() == 0) {
         std::cout << "No line";
         exit(-1);
@@ -199,15 +208,114 @@ triangle_geometry::Line triangle_geometry::triangle_handler::GetLine(const trian
     return Line{direction, p1.get_normal() * a + p2.get_normal() * b};
 }
 
-triangle_geometry::Point triangle_geometry::Line::GetPoint() {
+triangle_geometry::Point triangle_geometry::Line::GetPoint() const{
     return _point;
 }
 
-triangle_geometry::Point triangle_geometry::Line::Getdirection() {
+triangle_geometry::Vector3D triangle_geometry::Line::Getdirection() const{
     return _direction;
 }
 
-triangle_geometry::Line::Line(const triangle_geometry::Point &direction, const triangle_geometry::Point &point) :
+triangle_geometry::Line::Line(const triangle_geometry::Vector3D &direction, const triangle_geometry::Point &point) :
         _direction(direction), _point(point) {}
 
+triangle_geometry::Point triangle_geometry::triangle_handler::IntersectionEdgeLine(const Point& PointFromTriangle,const Line& line,
+        const Vector3D& EdgeDir) const{
+    Vector3D v(0, -EdgeDir.getZ(), EdgeDir.getY()), w( line.GetPoint(), PointFromTriangle);
+    double s = -(v * w)/(v * line.Getdirection());
+    return ( line.GetPoint() + s * line.Getdirection());
+}
 
+triangle_geometry::Vector3D::Vector3D() : Vector3D(0, 0, 0) {
+}
+
+triangle_geometry::Vector3D::Vector3D(double _x, double _y, double _z) : _x(_x), _y(_y), _z(_z) {
+}
+
+triangle_geometry::Vector3D::~Vector3D() {
+}
+
+double triangle_geometry::Vector3D::getX() const {
+    return _x;
+}
+
+double triangle_geometry::Vector3D::getY() const {
+    return _y;
+}
+
+double triangle_geometry::Vector3D::getZ() const {
+    return _z;
+}
+
+double triangle_geometry::Vector3D::length() const {
+    return sqrt(_x * _x + _y * _y + _z * _z);
+}
+
+void triangle_geometry::Vector3D::setX(double x) {
+    _x = x;
+}
+
+void triangle_geometry::Vector3D::setY(double y) {
+    _y = y;
+}
+
+void triangle_geometry::Vector3D::setZ(double z) {
+    _z = z;
+}
+
+bool triangle_geometry::Vector3D::operator==(const triangle_geometry::Vector3D &v) const {
+    double E = 0.000001;
+    return (abs(v.getX() - _x) < E) && (abs(v.getY() - _y) < E) && (abs(v.getZ() - _z) < E);
+}
+
+bool triangle_geometry::Vector3D::operator!=(const triangle_geometry::Vector3D &v) const {
+    return !(*this == v);
+}
+
+triangle_geometry::Vector3D triangle_geometry::Vector3D::operator+(const triangle_geometry::Vector3D &v) const {
+    return Vector3D(_x + v.getX(), _y + v.getY(), _z + v.getZ());
+}
+
+triangle_geometry::Vector3D triangle_geometry::Vector3D::operator-(const triangle_geometry::Vector3D &v) const {
+    return Vector3D(_x - v.getX(), _y - v.getY(), _z - v.getZ());
+}
+
+triangle_geometry::Vector3D triangle_geometry::Vector3D::operator*(const int a) const {
+    return Vector3D(_x * a, _y * a, _z * a);
+}
+
+double triangle_geometry::Vector3D::operator*(const triangle_geometry::Vector3D &v) const {
+    return (_x * v.getX() + _y * v.getY() + _z * v.getZ());
+}
+
+
+triangle_geometry::Vector3D operator*(int a, const triangle_geometry::Vector3D &v) {
+    return triangle_geometry::Vector3D(v.getX() * a, v.getY() * a, v.getZ() * a);
+}
+
+std::ostream &operator<<(std::ostream &os, const triangle_geometry::Vector3D &v) {
+    os << "(" << v.getX() << "; " << v.getY() << "; " << v.getZ() << ")";
+    return os;
+}
+
+std::istream &operator>>(std::istream &is, triangle_geometry::Vector3D &v) {
+    double x, y, z;
+    is >> x >> y >> z;
+    v.setX(x);
+    v.setY(y);
+    v.setZ(z);
+    return is;
+}
+
+triangle_geometry::Vector3D::Vector3D(const triangle_geometry::Point& point) : _x(point.get_x()), _y(point.get_y()), _z(point.get_z()) {}
+
+triangle_geometry::Vector3D::Vector3D(const triangle_geometry::Point &point1, const triangle_geometry::Point &point2) :
+        _x(point1.get_x() - point2.get_x()), _y(point1.get_y() - point2.get_y()), _z(point1.get_z() - point2.get_z()) {}
+
+triangle_geometry::Vector3D triangle_geometry::Vector3D::operator%(const Vector3D& v) const {
+    return Vector3D( _y * v.getZ() - _z * v.getY(), _z * v.getX() - _x * v.getZ(), _x * v.getY() - _y * v.getX());
+}
+
+triangle_geometry::Point triangle_geometry::operator+(const Vector3D& v, const Point& p){
+    return Point( v.getX() + p.get_x(), v.getY() + p.get_y(), v.getZ() + p.get_z());
+}
