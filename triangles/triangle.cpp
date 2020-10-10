@@ -1,9 +1,6 @@
 #include "triangle.hpp"
 #include <cmath>
 
-//TO-DO: точка пересечения стороны треугольника и прямой пересечения плоскостей, пересечение отрезков, 
-//этими прямыми
-
 bool triangle_geometry::is_intersect(const triangle &tr1, const triangle &tr2) {
     if ( tr1.is_degenerate() ){
         /*
@@ -15,7 +12,7 @@ bool triangle_geometry::is_intersect(const triangle &tr1, const triangle &tr2) {
          * удаление вырожденного треугольника из базы данных
          */
     }
-    Plane plane_1 = Plane( tr1);
+    Plane plane_1{tr1};
     int sign11, sign12, sign13;
     sign11 = sign_of_dist(plane_1, tr2.getVertice(1));
     sign12 = sign_of_dist(plane_1, tr2.getVertice(2));
@@ -205,7 +202,8 @@ triangle_geometry::Line triangle_geometry::GetLine(const triangle_geometry::Plan
     n2normsqr = p2.get_normal() * p2.get_normal();
     a = (s2 * n1n2dot - s1 * n2normsqr) / (n1n2dot * n1n2dot - n1normsqr * n2normsqr);
     b = (s1 * n1n2dot - s2 * n2normsqr) / (n1n2dot * n1n2dot - n1normsqr * n2normsqr);
-    return Line{direction, p1.get_normal() * a + p2.get_normal() * b};
+    Point p = MakePointFromVector(p1.get_normal() * a + p2.get_normal() * b);
+    return Line(direction, p) ;
 }
 
 triangle_geometry::Point triangle_geometry::Line::GetPoint() const{
@@ -316,6 +314,6 @@ triangle_geometry::Vector3D triangle_geometry::Vector3D::operator%(const Vector3
     return Vector3D( _y * v.getZ() - _z * v.getY(), _z * v.getX() - _x * v.getZ(), _x * v.getY() - _y * v.getX());
 }
 
-triangle_geometry::Point triangle_geometry::operator+(const Vector3D& v, const Point& p){
+triangle_geometry::Point triangle_geometry::operator+(const Point& p, const Vector3D& v ){
     return Point( v.getX() + p.get_x(), v.getY() + p.get_y(), v.getZ() + p.get_z());
 }

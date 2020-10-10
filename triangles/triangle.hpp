@@ -7,11 +7,10 @@
 
 namespace triangle_geometry{
     class Point{
-        double _x,_y,_z;
+    double _x,_y,_z;
     public:
         Point( const double &x,const double &y,const double &z);
         Point();
-        Point(const Vector3D& vector);
         Point(const Point& p) = default;
         Point& operator=(const Point& p) = default;
         double get_x() const;
@@ -19,51 +18,6 @@ namespace triangle_geometry{
         double get_z() const;
         double length() const;
     };
-
-    class triangle{
-    private:
-        Point _p1, _p2, _p3;
-    public:
-        friend Point;
-        triangle();
-        triangle( const Point &p1, const Point &p2, const Point &p3);
-        bool is_degenerate() const;//true if degenerate
-        Point getVertice( const int &i) const;
-    };
-
-    class Line{
-    private:
-        Vector3D _direction;//направляющий вектор прямой
-        Point _point;//точка на прямой
-    public:
-        Point GetPoint() const;
-        Vector3D Getdirection() const;
-        Line(const Vector3D& direction, const Point& point);
-        bool IsOverlap( const Point& p1,const Point& p2,const Point& p3,const Point& p4,const Point& p5,const Point& p6);
-    };
-
-    class Plane{
-    private:
-        Point _point;
-        Vector3D normal;
-        double _d;
-    public:
-        double get_d() const;
-        Vector3D get_normal() const;
-        Plane();
-        Plane( const Vector3D& norm_vec, const Point &point);
-        Plane( const triangle_geometry::triangle & tr);
-    };
-
-        bool is_intersect( const triangle& tr1,const triangle& tr2);
-        int sign_of_dist( const Plane &plane, const Point& point );//знак расстояния от точки до плоскости
-        bool is_coincident( const Plane& p1, const Plane& p2, const Point& point1, const Point& point2);//true, если совпадают
-        bool is_intersect2D( const triangle& tr1, const triangle& tr2);//true, если пересекаются
-        int GetMiddleIndex( const int& i0, const int& i1);
-        int GetExtremeIndex( const triangle& tr, const Vector3D& point);
-        Vector3D GetNormVector( const triangle& tr, const Point& p1, const Point& p2);
-        Line GetLine(const Plane& p1, const Plane& p2);
-        Point IntersectionEdgeLine(const Point& PointFromTriangle,const Line& line, const Vector3D& EdgeDir);
 
     class Vector3D {
     private:
@@ -109,7 +63,57 @@ namespace triangle_geometry{
 
     };
 
-Point operator+(const Vector3D& v, const Point& p);
+    class triangle{
+    private:
+        Point _p1, _p2, _p3;
+    public:
+        friend Point;
+        triangle();
+        triangle( const Point &p1, const Point &p2, const Point &p3);
+        bool is_degenerate() const;//true if degenerate
+        Point getVertice( const int &i) const;
+    };
+
+    class Line{
+    private:
+        Vector3D _direction;//направляющий вектор прямой
+        Point _point;//точка на прямой
+    public:
+        Point GetPoint() const;
+        Vector3D Getdirection() const;
+        Line(const Vector3D& direction, const Point& point);
+        bool IsOverlap( const Point& p1,const Point& p2,const Point& p3,const Point& p4,const Point& p5,const Point& p6);
+    };
+
+    class Plane{
+    private:
+        Point _point;
+        Vector3D normal;
+        double _d;
+    public:
+        double get_d() const;
+        Vector3D get_normal() const;
+        Plane();
+        Plane( const Vector3D& norm_vec, const Point &point);
+        Plane( const triangle_geometry::triangle & tr);
+    };
+
+bool is_intersect( const triangle& tr1,const triangle& tr2);
+int sign_of_dist( const Plane &plane, const Point& point );//знак расстояния от точки до плоскости
+bool is_coincident( const Plane& p1, const Plane& p2, const Point& point1, const Point& point2);//true, если совпадают
+bool is_intersect2D( const triangle& tr1, const triangle& tr2);//true, если пересекаются
+int GetMiddleIndex( const int& i0, const int& i1);
+int GetExtremeIndex( const triangle& tr, const Vector3D& point);
+Vector3D GetNormVector( const triangle& tr, const Point& p1, const Point& p2);
+Line GetLine(const Plane& p1, const Plane& p2);
+Point IntersectionEdgeLine(const Point& PointFromTriangle,const Line& line, const Vector3D& EdgeDir);
+Point MakePointFromVector(const Vector3D& v);
+Vector3D MakeVectorFromPoint(const Point& p);
+
+void DefinePoints( const Point& p1, const Point& p2, const Point& p3, const Point& p4);
+
+
+Point operator+(const Point& p, const Vector3D& v);
 
 Vector3D operator*(const int& a, const Vector3D &v);
 
