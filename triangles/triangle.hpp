@@ -17,6 +17,7 @@ namespace triangle_geometry{
         double get_y() const;
         double get_z() const;
         double length() const;
+        bool operator==(const Point& p) const;
     };
 
     class Vector3D {
@@ -110,7 +111,11 @@ Point IntersectionEdgeLine(const Point& PointFromTriangle,const Line& line, cons
 Point MakePointFromVector(const Vector3D& v);
 Vector3D MakeVectorFromPoint(const Point& p);
 
-void DefinePoints( const Point& p1, const Point& p2, const Point& p3, const Point& p4);
+std::vector<triangle_geometry::Point> DefinePoints( const Point& p1, const Point& p2, const Point& p3, const Point& p4);
+
+std::vector<triangle_geometry::Point> MakeVector(const Point& most_far, const Point& p1, const Point& p2, const Point& p3);
+
+Point MostFarPoint(const Point& point_to_cmp, const Point& p1, const Point& p2, const Point& p3 );
 
 
 Point operator+(const Point& p, const Vector3D& v);

@@ -1,5 +1,6 @@
 #include "triangle.hpp"
 #include <cmath>
+#include <algorithm>
 
 bool triangle_geometry::is_intersect(const triangle &tr1, const triangle &tr2) {
     if ( tr1.is_degenerate() ){
@@ -66,7 +67,14 @@ bool triangle_geometry::is_intersect(const triangle &tr1, const triangle &tr2) {
     t01 = IntersectionEdgeLine(p01, IntersectLine, edge01);
     t10 = IntersectionEdgeLine(p10, IntersectLine, edge10);
     t11 = IntersectionEdgeLine(p11, IntersectLine, edge11);
-    double d1, d2, d3, d4, d5, d6;
+    std::vector<triangle_geometry::Point> points = triangle_geometry::DefinePoints(t00, t01, t10, t11);
+    //выше - вектор с упорядоченными вершинами
+    if ( (points[0] == t00 || points[0] == t01) && (points[3] == t00 || points[3] == t01)) return true;
+    if ( (points[0] == t10 || points[0] == t11) && (points[3] == t10 || points[3] == t11)) return true;
+    if ( (points[0] == t00 || points[0] == t01) && (points[1] == t10 || points[1] == t11)) return true;
+    if ( (points[0] == t10 || points[0] == t11) && (points[1] == t00 || points[1] == t01)) return true;
+    if ( t00 == t01 || t00 == t11 || t10 == t01 || t01 == t11) return true;
+    return false;
 }
 
 int triangle_geometry::sign_of_dist(const Plane &plane, const Point &point) {
@@ -316,4 +324,56 @@ triangle_geometry::Vector3D triangle_geometry::Vector3D::operator%(const Vector3
 
 triangle_geometry::Point triangle_geometry::operator+(const Point& p, const Vector3D& v ){
     return Point( v.getX() + p.get_x(), v.getY() + p.get_y(), v.getZ() + p.get_z());
+}
+
+triangle_geometry::Point triangle_geometry::MakePointFromVector(const Vector3D& v){
+    return Point(v.getX(), v.getY(), v.getZ());
+}
+
+triangle_geometry::Vector3D triangle_geometry::MakeVectorFromPoint(const Point& p){
+    return Vector3D(p.get_x(), p.get_y(), p.get_z());
+}
+
+bool triangle_geometry::Point::operator==(const Point& p) const{
+    return (_x == p.get_x() && _y == p.get_y() && _z == p.get_z());
+}
+
+std::vector<triangle_geometry::Point> triangle_geometry::DefinePoints(const Point& p1, const Point& p2, const Point& p3, const Point& p4){
+    Point most_far = MostFarPoint(p1, p2, p3, p4);
+    if ( most_far == p2){//2 дальше всех от 1
+        return triangle_geometry::MakeVector(p2, p1, p3, p4);
+    }
+    if ( most_far == p3){
+        return triangle_geometry::MakeVector(p3, p1, p2, p4);
+    }else{//most_far == p4
+        return triangle_geometry::MakeVector(p4, p1, p2, p3);
+    }
+}
+
+
+std::vector<triangle_geometry::Point> MakeVector(const triangle_geometry::Point& most_far, 
+const triangle_geometry::Point& p1, const triangle_geometry::Point& p2, const triangle_geometry::Point& p3){
+    triangle_geometry::Vector3D v1(most_far, p1);
+    triangle_geometry::Vector3D v2(most_far, p2), v3(most_far, p3);
+    if( v2.length() < v1.length() && v3.length() < v1.length()){//most_far и 1 - крайние точки
+            if ( v2.length() < v3.length()) return std::vector<triangle_geometry::Point>{p1, p3, p2, most_far};
+            else return std::vector<triangle_geometry::Point>{p1, p2, p3, most_far};
+    }else{
+        if ( v1.length() < v2.length() && v3.length() < v2.length()){//most_far и 2 - крайние точки
+            if ( v1.length() < v3.length() ) return std::vector<triangle_geometry::Point>{p2, p3, p1, most_far};
+            else return std::vector<triangle_geometry::Point>{p2, p1, p3, most_far};
+        }else{//most_far и 3 - крайние точки
+            if ( v1.length() < v2.length() ) return std::vector<triangle_geometry::Point>{p3, p2, p1, most_far};
+            else return std::vector<triangle_geometry::Point>{p3, p1, p2, most_far};
+        }
+    }
+}
+
+triangle_geometry::Point MostFarPoint(const triangle_geometry::Point& point_to_cmp, const triangle_geometry::Point& p1,
+ const triangle_geometry::Point& p2, const triangle_geometry::Point& p3){
+    triangle_geometry::Vector3D v1(point_to_cmp, p1), v2(point_to_cmp, p2), v3(point_to_cmp, p3);
+    double l1 = v1.length(), l2 = v2.length(), l3 = v3.length();
+    if ( l1 > l2 && l1 > l3) return p1;
+    if ( l2 > l1 && l2 > l3) return p2;
+    return p3;
 }
