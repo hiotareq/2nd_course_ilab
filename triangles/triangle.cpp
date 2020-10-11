@@ -13,15 +13,34 @@ bool triangle_geometry::is_intersect(const triangle &tr1, const triangle &tr2) {
          * удаление вырожденного треугольника из базы данных
          */
     }
+
     Plane plane_1{tr1};
+    
     int sign11, sign12, sign13;
     sign11 = sign_of_dist(plane_1, tr2.getVertice(1));
     sign12 = sign_of_dist(plane_1, tr2.getVertice(2));
     sign13 = sign_of_dist(plane_1, tr2.getVertice(3));
     if ( sign11 * sign12 > 0 && sign11 * sign13 > 0) return false;//треугольник полностью с одной стороны от плоскости
     //else continue
+    
+    Plane plane_2 = Plane( tr2);
+    if ( is_coincident( plane_1, plane_2, tr1.getVertice(1), tr2.getVertice(1) )) {
+        if (plane_1.get_d() == plane_2.get_d()) {
+            if ( is_intersect2D(tr1, tr2)) return true;
+            return false;
+        }return false;//треугольники в параллельных плоскостях
+    }//else continue
+
+    int sign21, sign22, sign23;
+    sign21 = sign_of_dist(plane_2, tr1.getVertice(1));
+    sign22 = sign_of_dist(plane_2, tr1.getVertice(2));
+    sign23 = sign_of_dist(plane_2, tr1.getVertice(3));
+    if ( sign21 * sign22 > 0 && sign21 * sign23 > 0) return false;//треугольник полностью с одной стороны от плоскости
+    //else continue
+
     Vector3D edge00, edge01, edge10, edge11;
     Point p00, p01, p10, p11;//это точки для вычисления отрезков-проекций на линию пересечения
+
     p00 = tr1.getVertice(1);
     p01 = tr1.getVertice(3);
     if ( sign11 * sign12 < 0){//1 и 2 по разные стороны от плоскости
@@ -35,19 +54,7 @@ bool triangle_geometry::is_intersect(const triangle &tr1, const triangle &tr2) {
         edge00 = Vector3D(tr1.getVertice(1), tr1.getVertice(3));
         edge01 = Vector3D(tr1.getVertice(2), tr1.getVertice(3));
     }
-    Plane plane_2 = Plane( tr2);
-    if ( is_coincident( plane_1, plane_2, tr1.getVertice(1), tr2.getVertice(1) )) {
-        if (plane_1.get_d() == plane_2.get_d()) {
-            if ( is_intersect2D(tr1, tr2)) return true;
-            return false;
-        }return false;//треугольники в параллельных плоскостях
-    }//else continue
-    int sign21, sign22, sign23; 
-    sign21 = sign_of_dist(plane_2, tr1.getVertice(1));
-    sign22 = sign_of_dist(plane_2, tr1.getVertice(2));
-    sign23 = sign_of_dist(plane_2, tr1.getVertice(3));
-    if ( sign21 * sign22 > 0 && sign21 * sign23 > 0) return false;//треугольники полностью с одной стороны от плоскости
-    //else continue
+
     p10 = tr2.getVertice(1);
     p11 = tr2.getVertice(3);
     if ( sign21 * sign22 < 0){//1 и 2 по разные стороны от плоскости
@@ -61,14 +68,16 @@ bool triangle_geometry::is_intersect(const triangle &tr1, const triangle &tr2) {
         edge10 = Vector3D(tr1.getVertice(1), tr1.getVertice(3));
         edge11 = Vector3D(tr1.getVertice(2), tr1.getVertice(3));
     }
+
+    //проекция точек на линию пересечения
     Line IntersectLine = GetLine(plane_1, plane_2);
     Point t00, t01, t10, t11;//t0 - первый треугольник и его точки пересечения с прямой, t1 - второй треугольник
     t00 = IntersectionEdgeLine(p00, IntersectLine, edge00);
     t01 = IntersectionEdgeLine(p01, IntersectLine, edge01);
     t10 = IntersectionEdgeLine(p10, IntersectLine, edge10);
     t11 = IntersectionEdgeLine(p11, IntersectLine, edge11);
-    std::vector<triangle_geometry::Point> points = triangle_geometry::DefinePoints(t00, t01, t10, t11);
-    //выше - вектор с упорядоченными вершинами
+    std::vector<triangle_geometry::Point> points = triangle_geometry::DefinePoints(t00, t01, t10, t11);//вектор с упорядоченными вершинами
+    
     if ( (points[0] == t00 || points[0] == t01) && (points[3] == t00 || points[3] == t01)) return true;
     if ( (points[0] == t10 || points[0] == t11) && (points[3] == t10 || points[3] == t11)) return true;
     if ( (points[0] == t00 || points[0] == t01) && (points[1] == t10 || points[1] == t11)) return true;
