@@ -7,15 +7,17 @@ bool triangle_geometry::is_intersect(const triangle &tr1, const triangle &tr2) {
         /*
          * удаление вырожденного треугольника из базы данных
          */
+        return false;
     }
     if ( tr2.is_degenerate()){
         /*
          * удаление вырожденного треугольника из базы данных
          */
+        return false;
     }
 
     Plane plane_1{tr1};
-    
+
     int sign11, sign12, sign13;
     sign11 = sign_of_dist(plane_1, tr2.getVertice(1));
     sign12 = sign_of_dist(plane_1, tr2.getVertice(2));
@@ -71,6 +73,7 @@ bool triangle_geometry::is_intersect(const triangle &tr1, const triangle &tr2) {
 
     //проекция точек на линию пересечения
     Line IntersectLine = GetLine(plane_1, plane_2);
+    
     Point t00, t01, t10, t11;//t0 - первый треугольник и его точки пересечения с прямой, t1 - второй треугольник
     t00 = IntersectionEdgeLine(p00, IntersectLine, edge00);
     t01 = IntersectionEdgeLine(p01, IntersectLine, edge01);
@@ -304,8 +307,16 @@ double triangle_geometry::Vector3D::operator*(const triangle_geometry::Vector3D 
 }
 
 
-triangle_geometry::Vector3D operator*(int a, const triangle_geometry::Vector3D &v) {
+triangle_geometry::Vector3D operator*(const int& a, const triangle_geometry::Vector3D& v) {
     return triangle_geometry::Vector3D(v.getX() * a, v.getY() * a, v.getZ() * a);
+}
+
+triangle_geometry::Vector3D operator*(const double& a, const triangle_geometry::Vector3D& v){
+    return triangle_geometry::Vector3D(v.getX() * a, v.getY() * a, v.getZ() * a);
+}
+
+triangle_geometry::Vector3D triangle_geometry::Vector3D::operator*(const double a) const {
+    return Vector3D(_x * a, _y * a, _z * a);
 }
 
 std::ostream &operator<<(std::ostream &os, const triangle_geometry::Vector3D &v) {
@@ -348,7 +359,7 @@ bool triangle_geometry::Point::operator==(const Point& p) const{
 }
 
 std::vector<triangle_geometry::Point> triangle_geometry::DefinePoints(const Point& p1, const Point& p2, const Point& p3, const Point& p4){
-    Point most_far = MostFarPoint(p1, p2, p3, p4);
+    Point most_far = triangle_geometry::MostFarPoint(p1, p2, p3, p4);
     if ( most_far == p2){//2 дальше всех от 1
         return triangle_geometry::MakeVector(p2, p1, p3, p4);
     }
@@ -360,7 +371,7 @@ std::vector<triangle_geometry::Point> triangle_geometry::DefinePoints(const Poin
 }
 
 
-std::vector<triangle_geometry::Point> MakeVector(const triangle_geometry::Point& most_far, 
+std::vector<triangle_geometry::Point> triangle_geometry::MakeVector(const triangle_geometry::Point& most_far, 
 const triangle_geometry::Point& p1, const triangle_geometry::Point& p2, const triangle_geometry::Point& p3){
     triangle_geometry::Vector3D v1(most_far, p1);
     triangle_geometry::Vector3D v2(most_far, p2), v3(most_far, p3);
@@ -378,7 +389,7 @@ const triangle_geometry::Point& p1, const triangle_geometry::Point& p2, const tr
     }
 }
 
-triangle_geometry::Point MostFarPoint(const triangle_geometry::Point& point_to_cmp, const triangle_geometry::Point& p1,
+triangle_geometry::Point triangle_geometry::MostFarPoint(const triangle_geometry::Point& point_to_cmp, const triangle_geometry::Point& p1,
  const triangle_geometry::Point& p2, const triangle_geometry::Point& p3){
     triangle_geometry::Vector3D v1(point_to_cmp, p1), v2(point_to_cmp, p2), v3(point_to_cmp, p3);
     double l1 = v1.length(), l2 = v2.length(), l3 = v3.length();

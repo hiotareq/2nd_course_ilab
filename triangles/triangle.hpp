@@ -1,5 +1,5 @@
-#ifndef INC_2ND_TERM_ILAB_TRIANGLE_H
-#define INC_2ND_TERM_ILAB_TRIANGLE_H
+#ifndef INC_2ND_TERM_ILAB_TRIANGLE_HPP
+#define INC_2ND_TERM_ILAB_TRIANGLE_HPP
 
 #include <iostream>
 #include <vector>
@@ -56,6 +56,8 @@ namespace triangle_geometry{
 
         Vector3D operator*(const int a) const;
 
+        Vector3D operator*(const double a) const;
+
         double operator*(const Vector3D &v) const;
 
         double length() const;
@@ -100,15 +102,25 @@ namespace triangle_geometry{
     };
 
 bool is_intersect( const triangle& tr1,const triangle& tr2);
+
 int sign_of_dist( const Plane &plane, const Point& point );//знак расстояния от точки до плоскости
+
 bool is_coincident( const Plane& p1, const Plane& p2, const Point& point1, const Point& point2);//true, если совпадают
+
 bool is_intersect2D( const triangle& tr1, const triangle& tr2);//true, если пересекаются
+
 int GetMiddleIndex( const int& i0, const int& i1);
+
 int GetExtremeIndex( const triangle& tr, const Vector3D& point);
+
 Vector3D GetNormVector( const triangle& tr, const Point& p1, const Point& p2);
+
 Line GetLine(const Plane& p1, const Plane& p2);
+
 Point IntersectionEdgeLine(const Point& PointFromTriangle,const Line& line, const Vector3D& EdgeDir);
+
 Point MakePointFromVector(const Vector3D& v);
+
 Vector3D MakeVectorFromPoint(const Point& p);
 
 std::vector<triangle_geometry::Point> DefinePoints( const Point& p1, const Point& p2, const Point& p3, const Point& p4);
@@ -117,14 +129,15 @@ std::vector<triangle_geometry::Point> MakeVector(const Point& most_far, const Po
 
 Point MostFarPoint(const Point& point_to_cmp, const Point& p1, const Point& p2, const Point& p3 );
 
-
 Point operator+(const Point& p, const Vector3D& v);
-
-Vector3D operator*(const int& a, const Vector3D &v);
 
 std::ostream& operator<<(std::ostream& os, const Vector3D &v);
 
 std::istream& operator>>(std::istream& is, Vector3D &v);
 }
+
+triangle_geometry::Vector3D operator*(const int& a, const triangle_geometry::Vector3D& v);
+
+triangle_geometry::Vector3D operator*(const double& a, const triangle_geometry::Vector3D& v);
 
 #endif //INC_2ND_TERM_ILAB_TRIANGLE_H
