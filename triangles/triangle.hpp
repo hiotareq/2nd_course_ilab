@@ -7,26 +7,26 @@
 
 namespace triangle_geometry{
     class Point{
-    double _x,_y,_z;
+    float _x,_y,_z;
     public:
-        Point( const double &x,const double &y,const double &z);
+        Point( const float &x,const float &y,const float &z);
         Point();
         Point(const Point& p) = default;
         Point& operator=(const Point& p) = default;
-        double get_x() const;
-        double get_y() const;
-        double get_z() const;
-        double length() const;
+        float get_x() const;
+        float get_y() const;
+        float get_z() const;
+        float length() const;
         bool operator==(const Point& p) const;
     };
 
     class Vector3D {
     private:
-        double _x, _y, _z;
+        float _x, _y, _z;
     public:
         Vector3D();
 
-        Vector3D(double _x, double _y, double _z);
+        Vector3D(float _x, float _y, float _z);
 
         Vector3D(const triangle_geometry::Point& point);
 
@@ -34,17 +34,17 @@ namespace triangle_geometry{
 
         ~Vector3D();
 
-        double getX() const;
+        float getX() const;
 
-        double getY() const;
+        float getY() const;
 
-        double getZ() const;
+        float getZ() const;
 
-        void setX(double x);
+        void setX(float x);
 
-        void setY(double y);
+        void setY(float y);
 
-        void setZ(double z);
+        void setZ(float z);
 
         bool operator==(const Vector3D &v) const;
 
@@ -56,11 +56,11 @@ namespace triangle_geometry{
 
         Vector3D operator*(const int a) const;
 
-        Vector3D operator*(const double a) const;
+        Vector3D operator*(const float a) const;
 
-        double operator*(const Vector3D &v) const;
+        float operator*(const Vector3D &v) const;
 
-        double length() const;
+        float length() const;
 
         Vector3D operator%(const Vector3D &v) const;
 
@@ -92,9 +92,9 @@ namespace triangle_geometry{
     private:
         Point _point;
         Vector3D normal;
-        double _d;
+        float _d;
     public:
-        double get_d() const;
+        float get_d() const;
         Vector3D get_normal() const;
         Plane();
         Plane( const Vector3D& norm_vec, const Point &point);
@@ -138,6 +138,6 @@ std::istream& operator>>(std::istream& is, Vector3D &v);
 
 triangle_geometry::Vector3D operator*(const int& a, const triangle_geometry::Vector3D& v);
 
-triangle_geometry::Vector3D operator*(const double& a, const triangle_geometry::Vector3D& v);
+triangle_geometry::Vector3D operator*(const float& a, const triangle_geometry::Vector3D& v);
 
 #endif //INC_2ND_TERM_ILAB_TRIANGLE_H

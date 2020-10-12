@@ -16,7 +16,7 @@ bool triangle_geometry::is_intersect(const triangle &tr1, const triangle &tr2) {
         return false;
     }
 
-    Plane plane_1{tr1};
+    Plane plane_1(tr1);
 
     int sign11, sign12, sign13;
     sign11 = sign_of_dist(plane_1, tr2.getVertice(1));
@@ -90,7 +90,7 @@ bool triangle_geometry::is_intersect(const triangle &tr1, const triangle &tr2) {
 }
 
 int triangle_geometry::sign_of_dist(const Plane &plane, const Point &point) {
-    double dist = plane.get_normal() * point;
+    float dist = plane.get_normal() * point;
     if (dist < 0) return -1;
     if (dist > 0) return 1;
     else return 0;
@@ -101,45 +101,46 @@ triangle_geometry::Plane::Plane() = default;
 triangle_geometry::Plane::Plane(const Vector3D &norm_vec, const Point &point) {
     normal = norm_vec;
     _point = point;
-    _d = norm_vec * point;
+    _d = (norm_vec * point)/(1e-5);
 }
 
 triangle_geometry::Plane::Plane(const triangle_geometry::triangle &tr) {
             Vector3D v1(tr.getVertice(1), tr.getVertice(2)), v2(tr.getVertice(2), tr.getVertice(3));
             normal = v1 % v2;
             _point = tr.getVertice(3);
+            _d = v1 * normal;
         }
 
 triangle_geometry::Vector3D triangle_geometry::Plane::get_normal() const {
     return normal;
 }
 
-double triangle_geometry::Plane::get_d() const {
+float triangle_geometry::Plane::get_d() const {
     return _d;
 }
 
 triangle_geometry::triangle::triangle() = default;
 
 bool triangle_geometry::triangle::is_degenerate() const {//true if degenerate
-    Vector3D norm_vec, v1{_p1, _p2}, v2{_p2, _p3};
+    Vector3D norm_vec(0,0,0), v1(_p1, _p2), v2(_p2, _p3);
     norm_vec = v1 % v2;
     if (norm_vec.getX() == 0 && norm_vec.getY() == 0 && norm_vec.getZ() == 0) return true;
     return false;
 }
 
-triangle_geometry::Point::Point(const double &x, const double &y, const double &z) : _x(x), _y(y), _z(z) {}
+triangle_geometry::Point::Point(const float &x, const float &y, const float &z) : _x(x), _y(y), _z(z) {}
 
 triangle_geometry::Point::Point() : Point(0.0, 0.0, 0.0) {}
 
-double triangle_geometry::Point::get_x() const {
+float triangle_geometry::Point::get_x() const {
     return _x;
 }
 
-double triangle_geometry::Point::get_y() const {
+float triangle_geometry::Point::get_y() const {
     return _y;
 }
 
-double triangle_geometry::Point::get_z() const {
+float triangle_geometry::Point::get_z() const {
     return _z;
 }
 
@@ -214,7 +215,7 @@ triangle_geometry::Line triangle_geometry::GetLine(const triangle_geometry::Plan
         std::cout << "No line";
         exit(-1);
     }
-    double s1, s2, a, b, n1n2dot, n1normsqr, n2normsqr;
+    float s1, s2, a, b, n1n2dot, n1normsqr, n2normsqr;
     s1 = p1.get_d();
     s2 = p2.get_d();
     n1n2dot = p1.get_normal() * p2.get_normal();
@@ -240,49 +241,49 @@ triangle_geometry::Line::Line(const triangle_geometry::Vector3D &direction, cons
 triangle_geometry::Point triangle_geometry::IntersectionEdgeLine(const Point& PointFromTriangle,const Line& line,
         const Vector3D& EdgeDir) {
     Vector3D v(0, -EdgeDir.getZ(), EdgeDir.getY()), w( line.GetPoint(), PointFromTriangle);
-    double s = -(v * w)/(v * line.Getdirection());
+    float s = ((v % w).length())/((v % line.Getdirection()).length());
     return ( line.GetPoint() + s * line.Getdirection());
 }
 
 triangle_geometry::Vector3D::Vector3D() : Vector3D(0, 0, 0) {
 }
 
-triangle_geometry::Vector3D::Vector3D(double _x, double _y, double _z) : _x(_x), _y(_y), _z(_z) {
+triangle_geometry::Vector3D::Vector3D(float _x, float _y, float _z) : _x(_x), _y(_y), _z(_z) {
 }
 
 triangle_geometry::Vector3D::~Vector3D() {
 }
 
-double triangle_geometry::Vector3D::getX() const {
+float triangle_geometry::Vector3D::getX() const {
     return _x;
 }
 
-double triangle_geometry::Vector3D::getY() const {
+float triangle_geometry::Vector3D::getY() const {
     return _y;
 }
 
-double triangle_geometry::Vector3D::getZ() const {
+float triangle_geometry::Vector3D::getZ() const {
     return _z;
 }
 
-double triangle_geometry::Vector3D::length() const {
+float triangle_geometry::Vector3D::length() const {
     return sqrt(_x * _x + _y * _y + _z * _z);
 }
 
-void triangle_geometry::Vector3D::setX(double x) {
+void triangle_geometry::Vector3D::setX(float x) {
     _x = x;
 }
 
-void triangle_geometry::Vector3D::setY(double y) {
+void triangle_geometry::Vector3D::setY(float y) {
     _y = y;
 }
 
-void triangle_geometry::Vector3D::setZ(double z) {
+void triangle_geometry::Vector3D::setZ(float z) {
     _z = z;
 }
 
 bool triangle_geometry::Vector3D::operator==(const triangle_geometry::Vector3D &v) const {
-    double E = 0.000001;
+    float E = 0.000001;
     return (abs(v.getX() - _x) < E) && (abs(v.getY() - _y) < E) && (abs(v.getZ() - _z) < E);
 }
 
@@ -302,7 +303,7 @@ triangle_geometry::Vector3D triangle_geometry::Vector3D::operator*(const int a) 
     return Vector3D(_x * a, _y * a, _z * a);
 }
 
-double triangle_geometry::Vector3D::operator*(const triangle_geometry::Vector3D &v) const {
+float triangle_geometry::Vector3D::operator*(const triangle_geometry::Vector3D &v) const {
     return (_x * v.getX() + _y * v.getY() + _z * v.getZ());
 }
 
@@ -311,11 +312,11 @@ triangle_geometry::Vector3D operator*(const int& a, const triangle_geometry::Vec
     return triangle_geometry::Vector3D(v.getX() * a, v.getY() * a, v.getZ() * a);
 }
 
-triangle_geometry::Vector3D operator*(const double& a, const triangle_geometry::Vector3D& v){
+triangle_geometry::Vector3D operator*(const float& a, const triangle_geometry::Vector3D& v){
     return triangle_geometry::Vector3D(v.getX() * a, v.getY() * a, v.getZ() * a);
 }
 
-triangle_geometry::Vector3D triangle_geometry::Vector3D::operator*(const double a) const {
+triangle_geometry::Vector3D triangle_geometry::Vector3D::operator*(const float a) const {
     return Vector3D(_x * a, _y * a, _z * a);
 }
 
@@ -325,7 +326,7 @@ std::ostream &operator<<(std::ostream &os, const triangle_geometry::Vector3D &v)
 }
 
 std::istream &operator>>(std::istream &is, triangle_geometry::Vector3D &v) {
-    double x, y, z;
+    float x, y, z;
     is >> x >> y >> z;
     v.setX(x);
     v.setY(y);
@@ -339,7 +340,7 @@ triangle_geometry::Vector3D::Vector3D(const triangle_geometry::Point &point1, co
         _x(point1.get_x() - point2.get_x()), _y(point1.get_y() - point2.get_y()), _z(point1.get_z() - point2.get_z()) {}
 
 triangle_geometry::Vector3D triangle_geometry::Vector3D::operator%(const Vector3D& v) const {
-    return Vector3D( _y * v.getZ() - _z * v.getY(), _z * v.getX() - _x * v.getZ(), _x * v.getY() - _y * v.getX());
+    return Vector3D( (_y * v.getZ() - _z * v.getY())*(1000)/(1000), (_z * v.getX() - _x * v.getZ())*(1000)/(1000), (_x * v.getY() - _y * v.getX())*(1000)/(1000));
 }
 
 triangle_geometry::Point triangle_geometry::operator+(const Point& p, const Vector3D& v ){
@@ -392,7 +393,7 @@ const triangle_geometry::Point& p1, const triangle_geometry::Point& p2, const tr
 triangle_geometry::Point triangle_geometry::MostFarPoint(const triangle_geometry::Point& point_to_cmp, const triangle_geometry::Point& p1,
  const triangle_geometry::Point& p2, const triangle_geometry::Point& p3){
     triangle_geometry::Vector3D v1(point_to_cmp, p1), v2(point_to_cmp, p2), v3(point_to_cmp, p3);
-    double l1 = v1.length(), l2 = v2.length(), l3 = v3.length();
+    float l1 = v1.length(), l2 = v2.length(), l3 = v3.length();
     if ( l1 > l2 && l1 > l3) return p1;
     if ( l2 > l1 && l2 > l3) return p2;
     return p3;
