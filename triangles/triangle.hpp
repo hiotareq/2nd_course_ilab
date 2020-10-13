@@ -4,7 +4,6 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include "vector.hpp"
 
 namespace triangle_geometry{
     class Point{
@@ -84,53 +83,24 @@ namespace triangle_geometry{
         Point _point;//точка на прямой
     public:
         Point GetPoint() const;
-<<<<<<< HEAD
-        Point Getdirection() const;
-        Line(const Point& direction, const Point& point);
-=======
         Vector3D Getdirection() const;
         Line(const Vector3D& direction, const Point& point);
         bool IsOverlap( const Point& p1,const Point& p2,const Point& p3,const Point& p4,const Point& p5,const Point& p6);
->>>>>>> tmp
     };
 
     class Plane{
     private:
-<<<<<<< HEAD
-        Point normal, _point;
-        double _d;
-    public:
-        double get_d() const;
-        Point get_normal() const;
-=======
         Point _point;
         Vector3D normal;
         float _d;
     public:
         float get_d() const;
         Vector3D get_normal() const;
->>>>>>> tmp
         Plane();
         Plane( const Vector3D& norm_vec, const Point &point);
         Plane( const triangle_geometry::triangle & tr);
     };
 
-<<<<<<< HEAD
-    class triangle_handler{
-    private:
-        double e = 1e-3;
-    public:
-        bool is_intersect( const triangle& tr1,const triangle& tr2) const;
-        int sign_of_dist( const Plane &plane, const Point& point ) const;//знак расстояния от точки до плоскости
-        bool is_coincident( const Plane& p1, const Plane& p2, const Point& point1, const Point& point2) const;//true, если совпадают
-        bool is_intersect2D( const triangle& tr1, const triangle& tr2) const;//true, если пересекаются
-        int GetMiddleIndex( const int& i0, const int& i1) const;
-        int GetExtremeIndex( const triangle& tr, const Point& point) const;
-        Point GetNormVector( const triangle& tr, const Point& p1, const Point& p2) const;
-        Line GetLine(const Plane& p1, const Plane& p2) const;
-        Point IntersectionEdgeLine( const Point& PointFromTriangle, const Line& line, const Vector3D& EdgeDir) const;
-    };
-=======
 bool is_intersect( const triangle& tr1,const triangle& tr2);
 
 int sign_of_dist( const Plane &plane, const Point& point );//знак расстояния от точки до плоскости
@@ -164,7 +134,6 @@ Point operator+(const Point& p, const Vector3D& v);
 std::ostream& operator<<(std::ostream& os, const Vector3D &v);
 
 std::istream& operator>>(std::istream& is, Vector3D &v);
->>>>>>> tmp
 }
 
 triangle_geometry::Vector3D operator*(const int& a, const triangle_geometry::Vector3D& v);
