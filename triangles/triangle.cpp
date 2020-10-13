@@ -398,3 +398,27 @@ triangle_geometry::Point triangle_geometry::MostFarPoint(const triangle_geometry
     if ( l2 > l1 && l2 > l3) return p2;
     return p3;
 }
+
+double triangle_geometry::triangle::GetMaxX() const{
+    return std::max(_p1.get_x(), std::max(_p2.get_x(), _p3.get_x()));
+}
+
+double triangle_geometry::triangle::GetMaxY() const{
+    return std::max(_p1.get_y(), std::max(_p2.get_y(), _p3.get_y()));
+}
+
+double triangle_geometry::triangle::GetMaxZ() const{
+    return std::max(_p1.get_z(), std::max(_p2.get_z(), _p3.get_z()));
+}
+
+double triangle_geometry::triangle::GetMinX() const{
+    return std::min(_p1.get_x(), std::min(_p2.get_x(), _p3.get_x()));
+}
+
+double triangle_geometry::triangle::GetMinY() const{
+    return std::min(_p1.get_y(), std::min(_p2.get_y(), _p3.get_y()));
+}
+
+double triangle_geometry::triangle::GetMinZ() const{
+    return std::min(_p1.get_z(), std::min(_p2.get_z(), _p3.get_z()));
+}

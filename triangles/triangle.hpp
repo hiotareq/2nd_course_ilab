@@ -75,6 +75,14 @@ namespace triangle_geometry{
         triangle( const Point &p1, const Point &p2, const Point &p3);
         bool is_degenerate() const;//true if degenerate
         Point getVertice( const int &i) const;
+
+        double GetMaxX() const;
+        double GetMaxY() const;
+        double GetMaxZ() const;
+        double GetMinX() const;
+        double GetMinY() const;
+        double GetMinZ() const;
+
     };
 
     class Line{
