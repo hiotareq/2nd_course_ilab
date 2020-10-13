@@ -29,7 +29,7 @@ bool triangle_geometry::is_intersect(const triangle &tr1, const triangle &tr2) {
     if ( is_coincident( plane_1, plane_2, tr1.getVertice(1), tr2.getVertice(1) )) {
         if (plane_1.get_d() == plane_2.get_d()) {
             if ( is_intersect2D(tr1, tr2)) return true;
-            return false;
+            else return false;
         }return false;//треугольники в параллельных плоскостях
     }//else continue
 
@@ -164,13 +164,13 @@ bool triangle_geometry::is_coincident(const triangle_geometry::Plane &p1,
 
 
 bool triangle_geometry::is_intersect2D(const triangle &tr1, const triangle &tr2) {
-    for (int i0 = 0, i1 = 2; i0 < 3; i1 = 0, i0++) {
+    for (int i0 = 1, i1 = 3; i0 < 4; i1 = i0, i0++) {
         Vector3D point = GetNormVector(tr1, tr1.getVertice(i0), tr1.getVertice(i1));
         int min = GetExtremeIndex(tr2, point * (-1));
         Vector3D diff(tr2.getVertice(min), tr1.getVertice(i0));
         if (point * diff > 0) return false;
     }
-    for (int i0 = 0, i1 = 2; i0 < 3; i1 = i0, i0++) {
+    for (int i0 = 1, i1 = 3; i0 < 4; i1 = i0, i0++) {
         Vector3D point = GetNormVector(tr2, tr2.getVertice(i0), tr2.getVertice(i1));
         int min = GetExtremeIndex(tr1, point * (-1));
         Vector3D diff(tr1.getVertice(min), tr2.getVertice(i0));
