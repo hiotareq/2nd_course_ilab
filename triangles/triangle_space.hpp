@@ -32,7 +32,9 @@ namespace triangle_space{
             SpaceDivider();
             void look_at_cube(const Cube& cube);
             
-            void divide_and_look( const Cube& cube);            
+            void divide_and_look( const Cube& cube);    
+
+            int get_number_of_intersections() const;        
     };
 }
 

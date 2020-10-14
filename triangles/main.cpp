@@ -19,5 +19,6 @@ int main(){
     }
     FirstCube->SetCube(MinCoord, MinCoord, MinCoord, MaxCoord - MinCoord);
     SpDiv->look_at_cube(*FirstCube);
+    std::cout << SpDiv->get_number_of_intersections() << std::endl;
     return 0;
 }
