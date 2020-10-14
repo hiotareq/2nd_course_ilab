@@ -399,26 +399,71 @@ triangle_geometry::Point triangle_geometry::MostFarPoint(const triangle_geometry
     return p3;
 }
 
-double triangle_geometry::triangle::GetMaxX() const{
+double triangle_geometry::triangle::get_max_x() const{
     return std::max(_p1.get_x(), std::max(_p2.get_x(), _p3.get_x()));
 }
 
-double triangle_geometry::triangle::GetMaxY() const{
+double triangle_geometry::triangle::get_max_y() const{
     return std::max(_p1.get_y(), std::max(_p2.get_y(), _p3.get_y()));
 }
 
-double triangle_geometry::triangle::GetMaxZ() const{
+double triangle_geometry::triangle::get_max_z() const{
     return std::max(_p1.get_z(), std::max(_p2.get_z(), _p3.get_z()));
 }
 
-double triangle_geometry::triangle::GetMinX() const{
+double triangle_geometry::triangle::get_min_x() const{
     return std::min(_p1.get_x(), std::min(_p2.get_x(), _p3.get_x()));
 }
 
-double triangle_geometry::triangle::GetMinY() const{
+double triangle_geometry::triangle::get_min_y() const{
     return std::min(_p1.get_y(), std::min(_p2.get_y(), _p3.get_y()));
 }
 
-double triangle_geometry::triangle::GetMinZ() const{
+double triangle_geometry::triangle::get_min_z() const{
     return std::min(_p1.get_z(), std::min(_p2.get_z(), _p3.get_z()));
+}
+
+void triangle_geometry::Point::set_x(const float &newx){
+    _x = newx;
+}
+
+void triangle_geometry::Point::set_x(const float &newy){
+    _y = newy;
+}
+
+void triangle_geometry::Point::set_x(const float &newz){
+    _z = newz;
+}
+
+void triangle_geometry::Point::set_point(const float& newx, const float& newy, const float& newz){
+    _x = newx;
+    _y = newy;
+    _z = newz;
+}
+
+void triangle_geometry::triangle::set_triangle(const float& x1, const float& y1, const float& z1, const float& x2, const float& y2, const float& z2, const float& x3, const float& y3, const float& z3){
+    _p1.set_point(x1, y1, z1);
+    _p2.set_point(x2, y2, z2);
+    _p3.set_point(x3, y3, z3);
+}
+
+std::istream& operator>>(std::istream& is, triangle_geometry::triangle& tr){
+    float x1, y1, z1, x2, y2, z2, x3, y3, z3;
+    is >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> x3 >> y3 >> z3;
+    tr.set_triangle(x1, y1, z1, x2, y2, z2, x3, y3, z3);
+    return is;
+}
+
+float triangle_geometry::triangle::get_max_coord(){
+    float max1 = std::max(_p1.get_x(), std::max(_p1.get_y(), _p1.get_z()));
+    float max2 = std::max(_p2.get_x(), std::max(_p2.get_y(), _p2.get_z()));
+    float max3 = std::max(_p3.get_x(), std::max(_p3.get_y(), _p3.get_z()));
+    return std::max(max1, std::max(max2, max3));
+}
+
+float triangle_geometry::triangle::get_min_coord(){
+    float min1 = std::min(_p1.get_x(), std::min(_p1.get_y(), _p1.get_z()));
+    float min2 = std::min(_p2.get_x(), std::min(_p2.get_y(), _p2.get_z()));
+    float min3 = std::min(_p3.get_x(), std::min(_p3.get_y(), _p3.get_z()));
+    return std::min(min1, std::min(min2, min3));
 }

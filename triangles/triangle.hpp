@@ -11,13 +11,21 @@ namespace triangle_geometry{
     public:
         Point( const float &x,const float &y,const float &z);
         Point();
+
         Point(const Point& p) = default;
         Point& operator=(const Point& p) = default;
+
         float get_x() const;
         float get_y() const;
         float get_z() const;
-        float length() const;
+
         bool operator==(const Point& p) const;
+
+        void set_x(const float& newx);
+        void set_y(const float& newy);
+        void set_z(const float& newz);
+
+        void set_point(const float& newx, const float& newy, const float& newz);
     };
 
     class Vector3D {
@@ -76,12 +84,17 @@ namespace triangle_geometry{
         bool is_degenerate() const;//true if degenerate
         Point getVertice( const int &i) const;
 
-        double GetMaxX() const;
-        double GetMaxY() const;
-        double GetMaxZ() const;
-        double GetMinX() const;
-        double GetMinY() const;
-        double GetMinZ() const;
+        double get_max_x() const;
+        double get_max_y() const;
+        double get_max_z() const;
+        double get_min_x() const;
+        double get_min_y() const;
+        double get_min_z() const;
+
+        void set_triangle(const float& x1, const float& y1, const float& z1, const float& x2, const float& y2, const float& z2, const float& x3, const float& y3, const float& z3);
+
+        float get_max_coord();
+        float get_min_coord();
 
     };
 
@@ -142,6 +155,8 @@ Point operator+(const Point& p, const Vector3D& v);
 std::ostream& operator<<(std::ostream& os, const Vector3D &v);
 
 std::istream& operator>>(std::istream& is, Vector3D &v);
+
+std::istream& operator>>(std::istream& is, triangle& tr);
 }
 
 triangle_geometry::Vector3D operator*(const int& a, const triangle_geometry::Vector3D& v);

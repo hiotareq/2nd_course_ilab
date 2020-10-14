@@ -1,10 +1,23 @@
-#include "triangle.hpp"
+#include "triangle_space.hpp"
 #include <iostream>
 
 int main(){
-    triangle_geometry::Point p00(0, 0, 0), p01(10, 0, 0), p02(0, 10, 0), p10(2, 2, 0), p11(3, 4, 0), p12(4, 2, 0);
-    triangle_geometry::triangle tr0(p00, p01, p02), tr1(p10, p11, p12);
-    std::boolalpha;
-    std::cout << triangle_geometry::is_intersect(tr0, tr1);
+    int NumberOfTriangles;
+    float MinCoord = 0, MaxCoord = 0;
+    std::vector<triangle_geometry::triangle> Triangles;
+    triangle_space::Cube* FirstCube = new triangle_space::Cube;
+    triangle_space::SpaceDivider* SpDiv = new triangle_space::SpaceDivider;
+    std::cout << "Введите количество треугольников" << std::endl;
+    std::cin >> NumberOfTriangles;
+    std::cout << "Введите вершины треугольников" << std::endl;
+    for ( int i = 0 ; i < NumberOfTriangles; i++){
+        triangle_geometry::triangle NewTriangle;
+        std::cin >> NewTriangle;
+        Triangles.push_back(NewTriangle);
+        if ( MinCoord > NewTriangle.get_min_coord()) MinCoord = NewTriangle.get_min_coord();
+        if ( MaxCoord < NewTriangle.get_max_coord()) MaxCoord = NewTriangle.get_max_coord();
+    }
+    FirstCube->SetCube(MinCoord, MinCoord, MinCoord, MaxCoord - MinCoord);
+    SpDiv->look_at_cube(*FirstCube);
     return 0;
 }

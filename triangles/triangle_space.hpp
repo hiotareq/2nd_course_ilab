@@ -6,11 +6,18 @@
 namespace triangle_space{
     class Cube{
         private:
-        double _xmin, _xmax, _ymin, _ymax, _zmin, _zmax, length;
+        float _xmin, _ymin, _zmin, _length;
         std::vector<triangle_geometry::triangle> triangles;
         public:
         Cube();
-        Cube(const double& xmin, const double& ymin, const double& zmin, const double& xmax, const double& ymax, const double& zmax);
+        Cube(const float& xmin, const float& ymin, const float& zmin, const float& length);
+        void SetCube(const float& xmin, const float& ymin, const float& zmin, const float& length);
+
+        float get_min_x() const;
+        float get_min_y() const;
+        float get_min_z() const;
+
+        float get_length() const;
 
         std::vector<triangle_geometry::triangle> GetTriangles() const;
 
@@ -23,14 +30,10 @@ namespace triangle_space{
             int threshold;
         public:
             SpaceDivider();
-            void LookAtCube(const Cube& cube);
-            Cube SetCube();
-
-            void DivideAndLook( const Cube& cube);
-
+            void look_at_cube(const Cube& cube);
             
+            void divide_and_look( const Cube& cube);            
     };
-
 }
 
 
