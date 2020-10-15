@@ -1,5 +1,5 @@
 #include <iostream>
-#include "trianglespace.hpp"
+#include "triangle_space.hpp"
 #include <fstream>
 
 int main(){
