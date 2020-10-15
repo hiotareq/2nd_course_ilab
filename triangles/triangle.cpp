@@ -427,11 +427,11 @@ void triangle_geometry::Point::set_x(const float &newx){
     _x = newx;
 }
 
-void triangle_geometry::Point::set_x(const float &newy){
+void triangle_geometry::Point::set_y(const float &newy){
     _y = newy;
 }
 
-void triangle_geometry::Point::set_x(const float &newz){
+void triangle_geometry::Point::set_z(const float &newz){
     _z = newz;
 }
 
@@ -447,7 +447,7 @@ void triangle_geometry::triangle::set_triangle(const float& x1, const float& y1,
     _p3.set_point(x3, y3, z3);
 }
 
-std::istream& operator>>(std::istream& is, triangle_geometry::triangle& tr){
+std::istream& triangle_geometry::operator>>(std::istream& is, triangle_geometry::triangle& tr){
     float x1, y1, z1, x2, y2, z2, x3, y3, z3;
     is >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> x3 >> y3 >> z3;
     tr.set_triangle(x1, y1, z1, x2, y2, z2, x3, y3, z3);

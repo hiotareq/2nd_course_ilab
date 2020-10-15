@@ -21,7 +21,7 @@ namespace triangle_space{
 
         std::vector<triangle_geometry::triangle> GetTriangles() const;
 
-        void TriangleToCube(const triangle_geometry::triangle& tr, std::vector<Cube&>& cubes) const;
+        void TriangleToCube(const triangle_geometry::triangle& tr, std::vector<Cube>& cubes) const;
     };
 
     class SpaceDivider{
@@ -29,7 +29,7 @@ namespace triangle_space{
             int CounterOfIntersections;
             int threshold;
         public:
-            SpaceDivider();
+            SpaceDivider(const int& n);
             void look_at_cube(const Cube& cube);
             
             void divide_and_look( const Cube& cube);    

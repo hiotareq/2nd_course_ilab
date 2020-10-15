@@ -4,7 +4,7 @@ std::vector<triangle_geometry::triangle> triangle_space::Cube::GetTriangles() co
     return triangles;
 }
 
-void triangle_space::Cube::TriangleToCube(const triangle_geometry::triangle& tr, std::vector<Cube&>& cubes) const{
+void triangle_space::Cube::TriangleToCube(const triangle_geometry::triangle& tr, std::vector<Cube>& cubes) const{
     int imax = 1, jmax = 1, kmax = 1;
 
     if ((tr.get_max_x() - tr.get_min_x())/(_length/2) == 1) imax = 2;
@@ -27,8 +27,10 @@ void triangle_space::Cube::SetCube(const float& xmin, const float& ymin, const f
     _length = length;
 }
 
+triangle_space::SpaceDivider::SpaceDivider(const int& n) : threshold(n), CounterOfIntersections(0){}
+
 void triangle_space::SpaceDivider::divide_and_look(const Cube& cube){
-    std::vector<triangle_space::Cube&> cubes(8);
+    std::vector<triangle_space::Cube> cubes(8);
 
     for (int i = 0; i < 2; i++){
         for (int j = 0; j < 2; i++){
@@ -76,4 +78,20 @@ triangle_space::Cube::Cube() : Cube(0.0 ,0.0 ,0.0 ,0.0){}
 
 int triangle_space::SpaceDivider::get_number_of_intersections() const{
     return CounterOfIntersections;
+}
+
+float triangle_space::Cube::get_min_x() const{
+    return _xmin;
+}
+
+float triangle_space::Cube::get_min_y() const{
+    return _ymin;
+}
+
+float triangle_space::Cube::get_min_z() const{
+    return _zmin;
+}
+
+float triangle_space::Cube::get_length() const{
+    return _length;
 }
