@@ -14,7 +14,7 @@ int main(){
         std::cout << "Введите вершины треугольников" << std::endl;
         for ( int i = 0 ; i < NumberOfTriangles; i++){
             triangle_geometry::triangle NewTriangle;
-            std::sin >> NewTriangle;
+            std::сin >> NewTriangle;
             Triangles.push_back(NewTriangle);
             if ( MinCoord > NewTriangle.get_min_coord()) MinCoord = NewTriangle.get_min_coord();
             if ( MaxCoord < NewTriangle.get_max_coord()) MaxCoord = NewTriangle.get_max_coord();
