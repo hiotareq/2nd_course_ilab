@@ -1,4 +1,4 @@
-#include "triangle_space.hpp"
+#include "trianglespace.hpp"
 
 std::vector<triangle_geometry::triangle> triangle_space::Cube::GetTriangles() const{
     return triangles;

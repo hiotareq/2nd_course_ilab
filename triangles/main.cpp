@@ -1,12 +1,12 @@
-#include "triangle_space.hpp"
 #include <iostream>
+#include "trianglespace.hpp"
 
 int main(){
     int NumberOfTriangles;
     float MinCoord = 0, MaxCoord = 0;
     std::vector<triangle_geometry::triangle> Triangles;
     triangle_space::Cube* FirstCube = new triangle_space::Cube;
-    triangle_space::SpaceDivider* SpDiv = new triangle_space::SpaceDivider;
+    triangle_space::SpaceDivider* SpDiv = new triangle_space::SpaceDivider(8);
     std::cout << "Введите количество треугольников" << std::endl;
     std::cin >> NumberOfTriangles;
     std::cout << "Введите вершины треугольников" << std::endl;
