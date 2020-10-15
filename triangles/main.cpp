@@ -14,7 +14,7 @@ int main(){
         std::cout << "Введите вершины треугольников" << std::endl;
         for ( int i = 0 ; i < NumberOfTriangles; i++){
             triangle_geometry::triangle NewTriangle;
-            std::cin >> NewTriangle;
+            std::sin >> NewTriangle;
             Triangles.push_back(NewTriangle);
             if ( MinCoord > NewTriangle.get_min_coord()) MinCoord = NewTriangle.get_min_coord();
             if ( MaxCoord < NewTriangle.get_max_coord()) MaxCoord = NewTriangle.get_max_coord();
@@ -22,5 +22,5 @@ int main(){
         FirstCube->SetCube(MinCoord, MinCoord, MinCoord, MaxCoord - MinCoord);
         SpDiv->look_at_cube(*FirstCube);
         std::cout << SpDiv->get_number_of_intersections() << std::endl;
-    return 0;
+        return 0;
 }
