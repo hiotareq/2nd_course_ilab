@@ -3,6 +3,7 @@
 #include <fstream>
 
 int main(){
+    std::ifstream in("C:\\Users\\bobro\\Desktop\\2nd_course_ilab\\triangles\\10000_1.txt");
         std::cout << "started. Wait" << std::endl;
         int NumberOfTriangles;
         float MinCoord = 0, MaxCoord = 0;
@@ -14,7 +15,7 @@ int main(){
         std::cout << "Введите вершины треугольников" << std::endl;
         for ( int i = 0 ; i < NumberOfTriangles; i++){
             triangle_geometry::triangle NewTriangle;
-            std::sin >> NewTriangle;
+            std::cin >> NewTriangle;
             Triangles.push_back(NewTriangle);
             if ( MinCoord > NewTriangle.get_min_coord()) MinCoord = NewTriangle.get_min_coord();
             if ( MaxCoord < NewTriangle.get_max_coord()) MaxCoord = NewTriangle.get_max_coord();
